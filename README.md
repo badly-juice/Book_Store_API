@@ -263,43 +263,43 @@ http://localhost:8000/openapi.json
 ## Request Examples
 
 ### Register
-```http
+```bash
 curl -X POST http://localhost:8000/api/v1/auth/register \
   -H "Content-Type: application/json" \
   -d '{"name": "Alice", "email": "alice@example.com", "password": "Password123!"}'
 ```
 
 ### Login
-```http
+```bash
 curl -X POST http://localhost:8000/api/v1/auth/login \
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "username=alice@example.com&password=Password123!"
 ```
 
 ### Refresh Tokens
-```http
+```bash
 curl -X POST "http://localhost:8000/api/v1/auth/refresh?refresh_token=<refresh-token>"
 ```
 
 ### Get Books
-```http
+```bash
 curl http://localhost:8000/api/v1/books/
 ```
 
 ### Get Orders
-```http
+```bash
 curl http://localhost:8000/api/v1/orders/ \
   -H "Authorization: Bearer <access-token>"
 ```
 
 ### Create an Order
-```http
+```bash
 curl -X POST http://localhost:8000/api/v1/orders/ \
   -H "Authorization: Bearer <access-token>"
 ```
 
 ### Add an Item to an Order
-```http
+```bash
 curl -X POST http://localhost:8000/api/v1/orders/<order-uuid>/items \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <access-token>" \
@@ -307,13 +307,13 @@ curl -X POST http://localhost:8000/api/v1/orders/<order-uuid>/items \
 ``` 
 
 ### Get a Single Order
-```http
+```bash
 curl http://localhost:8000/api/v1/orders/<order-uuid> \
   -H "Authorization: Bearer <access-token>"
 ```
 
 ### Cancel an Order
-```http
+```bash
 curl -X POST http://localhost:8000/api/v1/orders/<order-uuid>/cancel \
   -H "Authorization: Bearer <access-token>"
 ```
