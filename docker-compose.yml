@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: bookstore_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bookstore
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d bookstore"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: bookstore_api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/bookstore
+      SECRET_KEY: 3ca8e5f52d94462d9c0d9c3d2d0d0b9df5e2b6f7f93d6b1d
+      ALGORITHM: HS256
+      ACCESS_TOKEN_EXPIRE_MINUTES: 30
+      REFRESH_TOKEN_EXPIRE_DAYS: 7
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "alembic upgrade head &&
+             uvicorn app.main:app --host 0.0.0.0 --port 8000"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: bookstore_pgadmin
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+
+volumes:
+  postgres_data:
